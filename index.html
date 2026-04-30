@@ -74,7 +74,32 @@
 
     function showScreen(id){ if(id==='vendorScreen'&&!isVendorMode)return; if(id==='publicScreen'&&!isPublicMode)return; screens.forEach(s=>document.getElementById(s).classList.toggle('active',s===id)); }
     function selectType(type,subtitle){ selectedType=type; selectedSubtitle=subtitle; document.getElementById('selectedTypeText').textContent=`${type}: ${subtitle}`; document.getElementById('clientForm').reset(); document.getElementById('saveMessage').style.display='none'; showScreen('formScreen'); document.getElementById('clientName').focus(); }
-    async function api(action,data={}){ const fd=new FormData(); fd.append('action',action); Object.entries(data).forEach(([k,v])=>fd.append(k,v)); const r=await fetch(SCRIPT_URL,{method:'POST',body:fd}); return r.json(); }
+   function api(action, data = {}) {
+  return new Promise((resolve, reject) => {
+    const callbackName = 'cb_' + Date.now();
+
+    let url = SCRIPT_URL + '?action=' + action + '&callback=' + callbackName;
+
+    Object.keys(data).forEach(k => {
+      url += '&' + k + '=' + encodeURIComponent(data[k]);
+    });
+
+    const script = document.createElement('script');
+    script.src = url;
+
+    window[callbackName] = function(res) {
+      resolve(res);
+      script.remove();
+      delete window[callbackName];
+    };
+
+    script.onerror = function() {
+      reject('Error conexión');
+    };
+
+    document.body.appendChild(script);
+  });
+}{ const fd=new FormData(); fd.append('action',action); Object.entries(data).forEach(([k,v])=>fd.append(k,v)); const r=await fetch(SCRIPT_URL,{method:'POST',body:fd}); return r.json(); }
     async function loadTickets(){ try{ const result=await api('list'); cloudTickets=Array.isArray(result.tickets)?result.tickets:[]; updateVendorScreen(); updatePublicScreen(); }catch(e){ console.warn('No se pudieron cargar los turnos:',e); } }
     function formatDate(date){ return new Intl.DateTimeFormat('es-MX',{dateStyle:'short',timeStyle:'short'}).format(date); }
     function formatTime(dateString){ if(!dateString)return'--:--'; return new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit'}).format(new Date(dateString)); }
