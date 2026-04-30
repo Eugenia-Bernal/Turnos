@@ -1,0 +1,19 @@
+CODISA - Sistema de Turnos
+
+Archivos incluidos:
+- cliente.html: pantalla para clientes.
+- vendedor.html: pantalla para vendedor.
+- pantalla.html: pantalla pública para monitor/TV.
+
+Uso:
+1. Descomprime este ZIP.
+2. Abre cliente.html en la tablet del cliente.
+3. Abre vendedor.html en la computadora/tablet del vendedor.
+4. Abre pantalla.html en la TV o monitor público.
+
+Importante:
+- Los turnos se guardan con localStorage.
+- Si usas archivos locales, cada navegador/dispositivo tendrá sus propios datos.
+- Para compartir turnos entre dispositivos reales, se requiere guardar/leer datos desde Google Sheets o una base de datos.
+- El ticket se imprime al registrar al cliente.
+- Para impresión automática sin ventana, usa Chrome en modo kiosco con --kiosk-printing.
