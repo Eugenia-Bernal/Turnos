@@ -1,114 +1,235 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Codisa | Sistema de Turnos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendedor - CODISA</title>
+
   <style>
-    :root {
-      --azul:#0b4ea2; --rojo:#8b1e1e; --gris:#6b7280; --gris-claro:#f3f4f6;
-      --blanco:#fff; --negro:#1f2937; --sombra:0 12px 30px rgba(0,0,0,.12); --radio:24px;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #0f172a;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#fff 0%,#eef4fb 100%);color:var(--negro);min-height:100dvh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-    .app{width:min(1220px,94%);min-height:100dvh;margin:0 auto;padding:clamp(18px,3vw,34px) 0;display:flex;flex-direction:column}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:clamp(18px,3vw,30px);user-select:none}
-    .brand{display:flex;align-items:center;gap:14px}
-    .logo{width:clamp(86px,10vw,120px);height:clamp(86px,10vw,120px);border-radius:26px;background:#fff;box-shadow:var(--sombra);display:grid;place-items:center;color:var(--azul);font-size:clamp(18px,2vw,26px);font-weight:900;border:4px solid var(--azul)}
-    h1{color:var(--azul);font-size:clamp(28px,5vw,44px);line-height:1.05}
-    .subtitle{color:var(--gris);margin-top:6px;font-size:clamp(18px,2.2vw,26px)}
-    .top-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    button{border:0;border-radius:999px;padding:18px 28px;min-height:64px;cursor:pointer;font-weight:900;font-size:clamp(17px,2vw,22px);transition:transform .2s ease,box-shadow .2s ease;touch-action:manipulation}
-    button:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.15)}
-    button:active,.card:active{transform:scale(.98)}
-    .btn-primary{background:var(--azul);color:#fff}.btn-secondary{background:var(--rojo);color:#fff}.btn-light{background:#fff;color:var(--azul);border:1px solid #dbe4f0}
-    .screen{display:none;animation:fade .25s ease}.screen.active{display:block;flex:1}
-    @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .hero{background:#fff;border-radius:var(--radio);padding:clamp(24px,4vw,48px);box-shadow:var(--sombra);text-align:center;min-height:calc(100dvh - 190px);display:flex;flex-direction:column;justify-content:center}
-    .hero h2{color:var(--azul);font-size:clamp(42px,7vw,76px);margin-bottom:12px;line-height:1}
-    .cards{margin-top:clamp(30px,5vw,54px);display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,30px)}
-    .card{background:#fff;border-radius:34px;padding:clamp(32px,5vw,56px) 24px;border:2px solid #eef2f7;box-shadow:0 10px 26px rgba(0,0,0,.1);cursor:pointer;min-height:clamp(260px,30vh,360px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;user-select:none;touch-action:manipulation}
-    .card:hover{transform:translateY(-6px);box-shadow:var(--sombra);border-color:var(--azul)}
-    .card-icon{width:clamp(96px,12vw,138px);height:clamp(96px,12vw,138px);border-radius:32px;background:var(--gris-claro);display:grid;place-items:center;font-size:clamp(54px,7vw,78px)}
-    .card h3{color:var(--rojo);font-size:clamp(32px,4vw,46px)}.card p{color:var(--gris);font-size:clamp(19px,2.4vw,28px)}
-    .panel{width:min(760px,100%);margin:0 auto;background:#fff;border-radius:34px;box-shadow:var(--sombra);padding:clamp(28px,5vw,54px)}
-    .panel h2{color:var(--azul);margin-bottom:10px;font-size:clamp(36px,5vw,56px)}
-    .selected-type{color:var(--rojo);font-weight:900;margin-bottom:22px;font-size:20px}
-    label{display:block;color:var(--gris);font-weight:900;margin:22px 0 10px;font-size:clamp(18px,2.2vw,24px)}
-    input{width:100%;border:2px solid #d1d5db;border-radius:22px;padding:22px 20px;min-height:72px;font-size:clamp(20px,2.6vw,30px);outline:none}
-    input:focus{border-color:var(--azul);box-shadow:0 0 0 4px rgba(11,78,162,.12)}
-    .form-actions{display:grid;grid-template-columns:1fr .55fr;gap:14px;margin-top:32px}
-    .vendor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px}
-    .metric{background:#fff;border-radius:var(--radio);box-shadow:var(--sombra);padding:26px;text-align:center}.metric span{display:block;color:var(--gris);font-weight:800;margin-bottom:12px}.metric strong{color:var(--azul);font-size:clamp(30px,6vw,54px)}
-    .vendor-actions{background:#fff;border-radius:var(--radio);box-shadow:var(--sombra);padding:28px;text-align:center;display:grid;gap:14px}
-    .queue-list{margin-top:20px;text-align:left;display:grid;gap:10px}.queue-item{background:var(--gris-claro);padding:16px 18px;border-radius:16px;display:flex;justify-content:space-between;gap:12px;color:var(--gris);font-weight:800;font-size:18px}
-    .public-display{min-height:calc(100dvh - 190px);display:grid;grid-template-rows:1fr auto;gap:24px}.public-card{background:#fff;border-radius:42px;box-shadow:var(--sombra);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:clamp(32px,6vw,76px);border:6px solid var(--azul)}
-    .public-label{color:var(--gris);font-size:clamp(28px,4vw,54px);font-weight:900;text-transform:uppercase}.public-turn{color:var(--rojo);font-size:clamp(120px,24vw,320px);font-weight:900;line-height:.95;margin:18px 0;letter-spacing:6px}.public-type{color:var(--azul);font-size:clamp(34px,6vw,86px);font-weight:900}.public-client{color:var(--gris);margin-top:16px;font-size:clamp(24px,4vw,52px);font-weight:800}
-    .public-footer{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.public-footer div{background:#fff;border-radius:28px;box-shadow:var(--sombra);padding:24px;text-align:center}.public-footer span{display:block;color:var(--gris);font-size:clamp(18px,2vw,26px);font-weight:900;margin-bottom:8px}.public-footer strong{color:var(--azul);font-size:clamp(34px,5vw,70px)}
-    #ticketArea{display:none}.ticket{width:72mm;background:#fff;color:#111;padding:5mm 3mm;text-align:center;font-family:Arial,Helvetica,sans-serif}.ticket .ticket-logo{font-size:28px;font-weight:900;color:#0b4ea2;margin-bottom:8px}.ticket .line{border-top:2px dotted #333;margin:12px 0}.ticket .turn-number{font-size:58px;font-weight:900;letter-spacing:2px;margin:10px 0}.ticket .type{font-size:20px;font-weight:900;color:#8b1e1e}.ticket p{font-size:14px;margin:7px 0}
-    .message{margin-top:14px;padding:12px 14px;border-radius:14px;background:#ecfdf5;color:#047857;font-weight:800;display:none}.error{background:#fef2f2;color:#991b1b}
-    @media(max-width:820px){header{flex-direction:column;align-items:stretch;text-align:center}.brand{justify-content:center;flex-direction:column}.top-actions{justify-content:center}.cards,.vendor-grid,.form-actions,.public-footer{grid-template-columns:1fr}.hero{min-height:auto}.card{min-height:210px}}
-    @media print{@page{size:80mm auto;margin:0}body *{visibility:hidden!important}#ticketArea,#ticketArea *{visibility:visible!important}#ticketArea{display:block!important;position:absolute;left:0;top:0;width:80mm}.ticket{margin:0 auto;width:72mm;box-shadow:none;font-size:12px}}
+
+    .header {
+      background: #0b4fa8;
+      color: white;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 42px;
+    }
+
+    .header p {
+      margin: 8px 0 0;
+      font-size: 18px;
+      opacity: .9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 35px auto;
+      padding: 25px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-size: 20px;
+      font-weight: bold;
+      color: #0b4fa8;
+    }
+
+    select {
+      width: 100%;
+      padding: 16px;
+      margin-top: 10px;
+      border: 2px solid #d1d5db;
+      border-radius: 14px;
+      font-size: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 22px;
+    }
+
+    button {
+      flex: 1;
+      padding: 18px;
+      border: none;
+      border-radius: 14px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #0b4fa8;
+      color: white;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .primary:hover {
+      background: #083f87;
+    }
+
+    .secondary:hover {
+      background: #d1d5db;
+    }
+
+    h2 {
+      color: #0b4fa8;
+      font-size: 30px;
+      margin-top: 0;
+    }
+
+    .ticket {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border: 2px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin: 12px 0;
+    }
+
+    .ticket-number {
+      font-size: 34px;
+      font-weight: bold;
+      color: #991b1b;
+    }
+
+    .ticket-info {
+      text-align: right;
+      font-size: 20px;
+      color: #374151;
+    }
+
+    .empty {
+      text-align: center;
+      color: #6b7280;
+      font-size: 22px;
+      padding: 35px;
+    }
+
+    @media (max-width: 600px) {
+      .buttons {
+        flex-direction: column;
+      }
+
+      .ticket {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      .ticket-info {
+        text-align: center;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <main class="app">
-    <header>
-      <div class="brand"><div class="logo">CODISA</div><div><h1>Sistema de Turnos</h1><p class="subtitle" id="pageSubtitle">Registro rápido para clientes</p></div></div>
-      <div class="top-actions vendor-only"><button class="btn-light" onclick="showScreen('clientScreen')">Cliente</button><button class="btn-secondary" onclick="showVendorScreen()">Vendedor</button><button class="btn-light" onclick="resetAllCloud()">Reiniciar día</button></div>
-    </header>
-    <section id="clientScreen" class="screen active"><div class="hero"><h2>Bienvenido/a</h2><p class="subtitle">Selecciona el tipo de atención que necesitas.</p><div class="cards"><article class="card" onclick="selectType('Mayoreo','Más de 12 piezas')"><div class="card-icon">🧺</div><h3>Mayoreo</h3><p>Más de 12 piezas</p></article><article class="card" onclick="selectType('Menudeo','11 piezas o menos')"><div class="card-icon">🛍️</div><h3>Menudeo</h3><p>11 piezas o menos</p></article><article class="card" onclick="selectType('Modificar','Modificar pedido')"><div class="card-icon">🔁</div><h3>Modificar</h3><p>Modificar pedido</p></article></div></div></section>
-    <section id="formScreen" class="screen"><div class="panel"><h2>Datos del cliente</h2><p id="selectedTypeText" class="selected-type"></p><form id="clientForm"><label for="clientName">Nombre del cliente</label><input id="clientName" name="cliente" type="text" placeholder="Ej. Juan Pérez" required><label for="whatsapp">Número de WhatsApp</label><input id="whatsapp" name="whatsapp" type="tel" placeholder="Ej. 5512345678" required><div class="form-actions"><button class="btn-primary" type="submit">Guardar y Generar Ticket</button><button class="btn-light" type="button" onclick="showScreen('clientScreen')">Volver</button></div><div id="saveMessage" class="message">Ticket generado correctamente.</div></form></div></section>
-    <section id="vendorScreen" class="screen"><div class="vendor-grid"><div class="metric"><span>Turno actual en atención</span><strong id="currentTurn">---</strong></div><div class="metric"><span>Turnos pendientes</span><strong id="pendingTurns">0</strong></div><div class="metric"><span>Último ticket generado</span><strong id="lastTicketTime">--:--</strong></div></div><div class="vendor-actions"><button class="btn-primary" onclick="attendNextTurn()">Atender Siguiente Turno</button><button class="btn-secondary" onclick="downloadTodayAttendedClients()">Descargar clientes atendidos hoy</button><div id="queueList" class="queue-list"></div></div></section>
-    <section id="publicScreen" class="screen"><div class="public-display"><div class="public-card"><p class="public-label">Turno en atención</p><div id="publicTurn" class="public-turn">---</div><p id="publicType" class="public-type">Esperando turno</p><p id="publicClient" class="public-client">Bienvenido/a a CODISA</p></div><div class="public-footer"><div><span>Turnos pendientes</span><strong id="publicPending">0</strong></div><div><span>Último ticket</span><strong id="publicLastTime">--:--</strong></div></div></div></section>
-  </main>
-  <div id="ticketArea"></div>
-  <script>
-    const SCRIPT_URL ='https://script.google.com/macros/s/AKfycbwfZI1qkoxFfJsxg3Ey9mKkTz6hdFZwuYttJ0paLt9nFfCYwt2KEl1OPQKxUSu45T8u/exec';
-    let selectedType = '', selectedSubtitle = '', cloudTickets = [];
-    const pageName = window.location.pathname.split('/').pop().toLowerCase();
-    const isVendorMode = pageName === 'vendedor.html';
-    const isPublicMode = pageName === 'pantalla.html';
-    const screens = ['clientScreen','formScreen','vendorScreen','publicScreen'];
 
-    function showScreen(id){ if(id==='vendorScreen'&&!isVendorMode)return; if(id==='publicScreen'&&!isPublicMode)return; screens.forEach(s=>document.getElementById(s).classList.toggle('active',s===id)); }
-    function selectType(type,subtitle){ selectedType=type; selectedSubtitle=subtitle; document.getElementById('selectedTypeText').textContent=`${type}: ${subtitle}`; document.getElementById('clientForm').reset(); document.getElementById('saveMessage').style.display='none'; showScreen('formScreen'); document.getElementById('clientName').focus(); }
-    async function api(action,data={}){ const fd=new FormData(); fd.append('action',action); Object.entries(data).forEach(([k,v])=>fd.append(k,v)); const r=await fetch(SCRIPT_URL,{method:'POST',body:fd}); return r.json(); }
-    async function loadTickets(){ try{ const result=await api('list'); cloudTickets=Array.isArray(result.tickets)?result.tickets:[]; updateVendorScreen(); updatePublicScreen(); }catch(e){ console.warn('No se pudieron cargar los turnos:',e); } }
-    function formatDate(date){ return new Intl.DateTimeFormat('es-MX',{dateStyle:'short',timeStyle:'short'}).format(date); }
-    function formatTime(dateString){ if(!dateString)return'--:--'; return new Intl.DateTimeFormat('es-MX',{hour:'2-digit',minute:'2-digit'}).format(new Date(dateString)); }
-    function isToday(dateString){ const d=new Date(dateString), t=new Date(); return d.getFullYear()===t.getFullYear()&&d.getMonth()===t.getMonth()&&d.getDate()===t.getDate(); }
+<div class="header">
+  <h1>Panel Vendedor</h1>
+  <p>Control de turnos CODISA</p>
+</div>
 
-    document.getElementById('clientForm').addEventListener('submit', async function(event){
-      event.preventDefault();
-      const cliente=document.getElementById('clientName').value.trim();
-      const whatsapp=document.getElementById('whatsapp').value.trim();
-      const msg=document.getElementById('saveMessage');
-      if(!cliente||!whatsapp||!selectedType)return;
-      msg.className='message'; msg.textContent='Guardando ticket...'; msg.style.display='block';
-      try{
-        const result=await api('create',{tipo:selectedType,descripcion:selectedSubtitle,cliente,whatsapp});
-        if(!result.ok) throw new Error(result.error||'Error al guardar');
-        renderTicket(result.ticket);
-        msg.textContent='Ticket generado correctamente.';
-        setTimeout(()=>window.print(),300);
-        setTimeout(()=>{ showScreen('clientScreen'); document.getElementById('clientForm').reset(); msg.style.display='none'; },900);
-      }catch(e){ msg.className='message error'; msg.textContent='No se pudo guardar el ticket. Revisa conexión o Apps Script.'; console.error(e); }
-    });
+<div class="container">
 
-    function renderTicket(ticket){
-      const one=`<div class="ticket"><div class="ticket-logo">CODISA</div><p>Bienvenido/a</p><div class="line"></div><p class="type">${ticket.tipo}</p><div class="turn-number">${ticket.turno}</div><div class="line"></div><p><strong>Cliente:</strong> ${escapeHTML(ticket.cliente)}</p><p><strong>WhatsApp:</strong> ${escapeHTML(ticket.whatsapp)}</p><p><strong>Fecha:</strong> ${formatDate(new Date(ticket.fecha))}</p><p>Conserva este ticket para tu atención.</p></div>`;
-      document.getElementById('ticketArea').innerHTML=one+'<div style="height:8mm"></div>'+one;
+  <div class="card">
+    <label for="asesor">Selecciona asesor</label>
+    <select id="asesor">
+      <option value="Asesor 1">Asesor 1</option>
+      <option value="Asesor 2">Asesor 2</option>
+      <option value="Asesor 3">Asesor 3</option>
+    </select>
+
+    <div class="buttons">
+      <button class="primary" onclick="llamarSiguiente()">Llamar siguiente turno</button>
+      <button class="secondary" onclick="cargarTurnos()">Actualizar lista</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Turnos pendientes</h2>
+    <div id="lista"></div>
+  </div>
+
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQO4L8XprFWZTVfRcUZuol95NFa5MOKvZP9_EUY8bFTFx0NArHq-dTbViVSP-f-qI8/exec";
+
+function jsonp(url) {
+  return new Promise((resolve) => {
+    const callback = "cb_" + Date.now();
+    window[callback] = function(data) {
+      resolve(data);
+      delete window[callback];
+      document.body.removeChild(script);
+    };
+
+    const script = document.createElement("script");
+    script.src = url + "&callback=" + callback;
+    document.body.appendChild(script);
+  });
+}
+
+function llamarSiguiente() {
+  const asesor = document.getElementById("asesor").value;
+
+  jsonp(SCRIPT_URL + "?action=attendNext&asesor=" + encodeURIComponent(asesor))
+    .then(() => cargarTurnos());
+}
+
+function cargarTurnos() {
+  jsonp(SCRIPT_URL + "?action=list").then(data => {
+    const pendientes = data.tickets.filter(t => t.atendido !== "true");
+    const lista = document.getElementById("lista");
+
+    if (pendientes.length === 0) {
+      lista.innerHTML = `<div class="empty">No hay turnos pendientes</div>`;
+      return;
     }
-    function showVendorScreen(){ if(!isVendorMode)return; loadTickets(); showScreen('vendorScreen'); }
-    function updateVendorScreen(){ const curEl=document.getElementById('currentTurn'); if(!curEl)return; const pending=cloudTickets.filter(t=>String(t.atendido)!=='true'); const attended=cloudTickets.filter(t=>String(t.atendido)==='true'); const current=attended.length?attended[attended.length-1]:null; const last=cloudTickets.length?cloudTickets[cloudTickets.length-1]:null; curEl.textContent=current?current.turno:'---'; document.getElementById('pendingTurns').textContent=pending.length; document.getElementById('lastTicketTime').textContent=last?formatTime(last.fecha):'--:--'; const q=document.getElementById('queueList'); if(!q)return; q.innerHTML=!pending.length?'<div class="queue-item"><span>No hay turnos pendientes</span><span>✅</span></div>':pending.map(t=>`<div class="queue-item"><span>${t.turno} · ${escapeHTML(t.tipo)} · ${escapeHTML(t.cliente)}</span><span>${formatTime(t.fecha)}</span></div>`).join(''); }
-    function updatePublicScreen(){ const el=document.getElementById('publicTurn'); if(!el)return; const pending=cloudTickets.filter(t=>String(t.atendido)!=='true'); const attended=cloudTickets.filter(t=>String(t.atendido)==='true'); const current=attended.length?attended[attended.length-1]:null; const last=cloudTickets.length?cloudTickets[cloudTickets.length-1]:null; el.textContent=current?current.turno:'---'; document.getElementById('publicType').textContent=current?current.tipo:'Esperando turno'; document.getElementById('publicClient').textContent=current?`Pase a atención: ${current.cliente}`:'Bienvenido/a a CODISA'; document.getElementById('publicPending').textContent=pending.length; document.getElementById('publicLastTime').textContent=last?formatTime(last.fecha):'--:--'; }
-    async function attendNextTurn(){ try{ const r=await api('attendNext'); if(!r.ok){ alert(r.error||'No hay turnos pendientes.'); return; } await loadTickets(); }catch(e){ alert('No se pudo atender el siguiente turno.'); console.error(e); } }
-    function downloadTodayAttendedClients(){ const rows=cloudTickets.filter(t=>String(t.atendido)==='true'&&t.horaAtencion&&isToday(t.horaAtencion)); if(!rows.length){ alert('Todavía no hay clientes atendidos el día de hoy.'); return; } const headers=['Turno','Tipo de atención','Cliente','WhatsApp','Fecha de ticket','Hora de atención']; const data=rows.map(t=>[t.turno,t.tipo,t.cliente,t.whatsapp,formatDate(new Date(t.fecha)),formatDate(new Date(t.horaAtencion))]); const csv=[headers,...data].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\\n'); const blob=new Blob(['\\ufeff'+csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=url; link.download=`clientes-atendidos-codisa-${new Date().toISOString().slice(0,10)}.csv`; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); }
-    async function resetAllCloud(){ if(!confirm('¿Deseas reiniciar todos los turnos del día y comenzar desde 001?'))return; try{ const r=await api('reset'); if(!r.ok)throw new Error(r.error||'Error al reiniciar'); await loadTickets(); }catch(e){ alert('No se pudo reiniciar.'); console.error(e); } }
-    function escapeHTML(value){ return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-    setInterval(()=>{ if(isVendorMode||isPublicMode)loadTickets(); },3000);
-    document.addEventListener('DOMContentLoaded',function(){ document.querySelectorAll('.vendor-only').forEach(el=>el.style.display=isVendorMode?'flex':'none'); if(isVendorMode){ document.getElementById('pageSubtitle').textContent='Panel de atención para vendedores'; showVendorScreen(); } else if(isPublicMode){ document.getElementById('pageSubtitle').textContent='Pantalla pública de turnos'; loadTickets(); showScreen('publicScreen'); } else { showScreen('clientScreen'); } });
-  </script>
+
+    lista.innerHTML = pendientes.map(t => `
+      <div class="ticket">
+        <div class="ticket-number">${t.turno}</div>
+        <div class="ticket-info">
+          <b>${t.tipo}</b><br>
+          ${t.descripcion || ""}
+        </div>
+      </div>
+    `).join("");
+  });
+}
+
+cargarTurnos();
+setInterval(cargarTurnos, 5000);
+</script>
+
 </body>
 </html>
