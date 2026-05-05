@@ -122,68 +122,355 @@ h2 {
     <div id="lista"></div>
   </div>
 
+</div><!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Vendedor - CODISA MONTERREY</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #eef3fa;
+  color: #0f172a;
+}
+
+.header {
+  background: linear-gradient(135deg, #0b4fa8, #063b7a);
+  color: white;
+  padding: 28px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 42px;
+}
+
+.brand p {
+  margin: 6px 0 0;
+  font-size: 20px;
+  opacity: .9;
+}
+
+.badge {
+  background: white;
+  color: #0b4fa8;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.container {
+  width: 92%;
+  max-width: 1100px;
+  margin: 35px auto;
+}
+
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.card {
+  background: white;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+h2 {
+  color: #0b4fa8;
+  margin-top: 0;
+  font-size: 30px;
+}
+
+select {
+  width: 100%;
+  padding: 18px;
+  border-radius: 16px;
+  border: 2px solid #cbd5e1;
+  font-size: 22px;
+  outline: none;
+}
+
+select:focus {
+  border-color: #0b4fa8;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 18px;
+  border: none;
+  border-radius: 16px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.primary {
+  background: #0b4fa8;
+  color: white;
+}
+
+.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.primary:hover {
+  background: #083f87;
+}
+
+.secondary:hover {
+  background: #d1d5db;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.stat {
+  border-radius: 22px;
+  padding: 25px;
+  text-align: center;
+}
+
+.stat.blue {
+  background: #0b4fa8;
+  color: white;
+}
+
+.stat.red {
+  background: #991b1b;
+  color: white;
+}
+
+.stat span {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.stat b {
+  font-size: 54px;
+}
+
+.list-card {
+  margin-top: 24px;
+}
+
+.ticket {
+  display: grid;
+  grid-template-columns: 90px 1fr 140px;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px;
+  border-radius: 20px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  margin-bottom: 14px;
+}
+
+.ticket-number {
+  font-size: 42px;
+  font-weight: 900;
+  color: #991b1b;
+}
+
+.ticket-info {
+  text-align: left;
+}
+
+.ticket-info b {
+  font-size: 24px;
+  color: #0f172a;
+}
+
+.ticket-info small {
+  display: block;
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 17px;
+}
+
+.ticket-time {
+  text-align: right;
+  font-size: 20px;
+  font-weight: bold;
+  color: #0b4fa8;
+}
+
+.empty {
+  text-align: center;
+  padding: 45px;
+  color: #64748b;
+  font-size: 24px;
+}
+
+@media (max-width: 800px) {
+  .header, .top-grid, .actions, .stats {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .ticket {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .ticket-info, .ticket-time {
+    text-align: center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="brand">
+    <h1>Panel Vendedor</h1>
+    <p>Control de turnos CODISA MONTERREY</p>
+  </div>
+  <div class="badge" id="horaActual">--:--</div>
+</div>
+
+<div class="container">
+
+  <div class="top-grid">
+
+    <div class="card">
+      <h2>Selecciona asesor</h2>
+
+      <select id="asesor">
+        <option>Asesor 1</option>
+        <option>Asesor 2</option>
+        <option>Asesor 3</option>
+      </select>
+
+      <div class="actions">
+        <button class="primary" onclick="siguiente()">Llamar siguiente turno</button>
+        <button class="secondary" onclick="cargar()">Actualizar</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat blue">
+        <span>Pendientes</span>
+        <b id="totalPendientes">0</b>
+      </div>
+
+      <div class="stat red">
+        <span>Último llamado</span>
+        <b id="ultimoTurno">---</b>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card list-card">
+    <h2>Turnos pendientes</h2>
+    <div id="lista"></div>
+  </div>
+
 </div>
 
 <script>
 const URL = "https://script.google.com/macros/s/AKfycby9xvL2meItmqOR4dDCDaDyE1B5tbaCLYunNM2qUjea43JmPEQp43Nv5uV9xTG6QQHB/exec";
 
+function jsonp(url) {
+  return new Promise(resolve => {
+    const callback = "cb_" + Date.now();
+
+    window[callback] = function(data) {
+      resolve(data);
+      delete window[callback];
+      document.body.removeChild(script);
+    };
+
+    const script = document.createElement("script");
+    script.src = url + "&callback=" + callback;
+    document.body.appendChild(script);
+  });
+}
+
 function cargar() {
-  const callback = "cb_" + Date.now();
+  jsonp(URL + "?action=list").then(data => {
+    const tickets = data.tickets || [];
+    const pendientes = tickets.filter(t => t.atendido !== "true");
+    const atendidos = tickets.filter(t => t.atendido === "true");
+    const ultimo = atendidos[atendidos.length - 1];
 
-  window[callback] = function(data) {
-    if(data.ok){
+    document.getElementById("totalPendientes").innerText = pendientes.length;
+    document.getElementById("ultimoTurno").innerText = ultimo ? ultimo.turno : "---";
 
-      const pendientes = data.tickets.filter(t => t.atendido !== "true");
+    const lista = document.getElementById("lista");
 
-      document.getElementById("lista").innerHTML = pendientes.map(t => {
-
-        const hora = new Date(t.fecha).toLocaleTimeString("es-MX", {
-          hour: "2-digit",
-          minute: "2-digit"
-        });
-
-        return `
-          <div class="ticket">
-            <div class="ticket-number">${t.turno}</div>
-
-            <div class="ticket-info">
-              <b>${t.tipo}</b><br>
-              ${t.descripcion || ""}
-            </div>
-
-            <div class="ticket-time">
-              ${hora}
-            </div>
-          </div>
-        `;
-      }).join("");
-
+    if (pendientes.length === 0) {
+      lista.innerHTML = `<div class="empty">No hay turnos pendientes</div>`;
+      return;
     }
-  };
 
-  const script = document.createElement("script");
-  script.src = URL + "?action=list&callback=" + callback;
-  document.body.appendChild(script);
+    lista.innerHTML = pendientes.map(t => {
+      const hora = new Date(t.fecha).toLocaleTimeString("es-MX", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      return `
+        <div class="ticket">
+          <div class="ticket-number">${t.turno}</div>
+
+          <div class="ticket-info">
+            <b>${t.tipo}</b>
+            <small>${t.descripcion || ""}</small>
+            <small>Tomó turno: ${hora}</small>
+          </div>
+
+          <div class="ticket-time">${hora}</div>
+        </div>
+      `;
+    }).join("");
+  });
 }
 
 function siguiente() {
   const asesor = document.getElementById("asesor").value;
-  const callback = "cb_" + Date.now();
 
-  window[callback] = function(data) {
-    cargar();
-  };
-
-  const script = document.createElement("script");
-  script.src = URL + "?action=attendNext&asesor=" + asesor + "&callback=" + callback;
-  document.body.appendChild(script);
+  jsonp(URL + "?action=attendNext&asesor=" + encodeURIComponent(asesor))
+    .then(() => cargar());
 }
 
-/* AUTO ACTUALIZA CADA 5 SEGUNDOS */
-setInterval(cargar, 5000);
+function reloj() {
+  document.getElementById("horaActual").innerText =
+    new Date().toLocaleTimeString("es-MX", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+}
 
-/* PRIMER CARGA */
+reloj();
 cargar();
+
+setInterval(reloj, 1000);
+setInterval(cargar, 5000);
 </script>
 
 </body>
